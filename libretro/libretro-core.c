@@ -67,6 +67,22 @@ int CROP_WIDTH;
 int CROP_HEIGHT;
 int VIRTUAL_WIDTH;
 
+/* Constants for internal surface dimensions for PAL/NTSC */
+#define RETROW_C64_PAL 384
+#define RETROH_C64_PAL 272
+#define RETROW_C64_NTSC 384
+#define RETROH_C6$_NTSC 247
+
+#define RETROW_VIC20_PAL 448
+#define RETROH_VIC20_PAL 284
+#define RETROW_VIC20_NTSC 448
+#define RETROH_VIC20_NTSC 234
+
+#define RETROW_PLUS4_PAL 384
+#define RETROH_PLUS4_PAL 288
+#define RETROW_PLUS4_NTSC 384
+#define RETROH_PLUS4_NTSC 242
+
 #if defined(__CBM2__)
 int	retrow=704;
 int	retroh=266;
@@ -74,14 +90,14 @@ int	retroh=266;
 int	retrow=448;
 int	retroh=284;
 #elif defined(__VIC20__)
-int	retrow=448;
-int	retroh=284;
+int	retrow=RETROW_VIC20_PAL;
+int	retroh=RETROH_VIC20_PAL;
 #elif defined(__PLUS4__)
-int	retrow=384;
-int	retroh=288;
+int	retrow=RETROW_PLUS4_PAL;
+int	retroh=RETROH_PLUS4_PAL;
 #else
-int	retrow=384;
-int	retroh=272;
+int	retrow=RETROW_C64_PAL;
+int	retroh=RETROH_C64_PAL;
 #endif
 
 #include "vkbd.i"
@@ -573,11 +589,27 @@ static void update_variables(void)
    {
       int modl=0;
 
-      if (strcmp(var.value, "VIC20MODEL_VIC20_PAL") == 0)modl=VIC20MODEL_VIC20_PAL;
-      else if (strcmp(var.value, "VIC20MODEL_VIC20_NTSC") == 0)modl=VIC20MODEL_VIC20_NTSC;
-      else if (strcmp(var.value, "VIC20MODEL_VIC21") == 0)modl=VIC20MODEL_VIC21;
+      if (strcmp(var.value, "VIC20MODEL_VIC20_PAL") == 0)
+	{
+	  retrow=RETROW_VIC20_PAL;
+	  retroh=RETROH_VIC20_PAL;
+	  modl=VIC20MODEL_VIC20_PAL;
+	}
+      else if (strcmp(var.value, "VIC20MODEL_VIC20_NTSC") == 0)
+	{
+	  retrow=RETROW_VIC20_NTSC;
+	  retroh=RETROH_VIC20_NTSC;
+	  modl=VIC20MODEL_VIC20_NTSC;
+	}
+      else if (strcmp(var.value, "VIC20MODEL_VIC21") == 0)
+	{
+	  /* This was a marketing oddity only sold in the US in the New England area. Very odd that VICE makes a model # for it! -tschak */
+	  retrow=RETROW_VIC20_NTSC;
+	  retroh=RETROH_VIC20_NTSC;
+	  modl=VIC20MODEL_VIC21;
+	}
       else if (strcmp(var.value, "VIC20MODEL_UNKNOWN") == 0)modl=VIC20MODEL_UNKNOWN;
-
+      
       if(retro_ui_finalized)
         vic20model_set(modl);
       else RETROC64MODL=modl;
@@ -590,12 +622,42 @@ static void update_variables(void)
    {
       int modl=0;
 
-      if (strcmp(var.value, "PLUS4MODEL_C16_PAL") == 0)modl=PLUS4MODEL_C16_PAL;
-      else if (strcmp(var.value, "PLUS4MODEL_C16_NTSC") == 0)modl=PLUS4MODEL_C16_NTSC;
-      else if (strcmp(var.value, "PLUS4MODEL_PLUS4_PAL") == 0)modl=PLUS4MODEL_PLUS4_PAL;
-      else if (strcmp(var.value, "PLUS4MODEL_PLUS4_NTSC") == 0)modl=PLUS4MODEL_PLUS4_NTSC;
-      else if (strcmp(var.value, "PLUS4MODEL_V364_NTSC") == 0)modl=PLUS4MODEL_V364_NTSC;
-      else if (strcmp(var.value, "PLUS4MODEL_232_NTSC") == 0)modl=PLUS4MODEL_232_NTSC;
+      if (strcmp(var.value, "PLUS4MODEL_C16_PAL") == 0)
+	{
+	  retrow=RETROW_PLUS4_PAL;
+	  retroh=RETROH_PLUS4_PAL;
+	  modl=PLUS4MODEL_C16_PAL;
+	}
+      else if (strcmp(var.value, "PLUS4MODEL_C16_NTSC") == 0)
+	{
+	  retrow=RETROW_PLUS4_NTSC;
+	  retroh=RETROH_PLUS4_NTSC;
+	  modl=PLUS4MODEL_C16_NTSC;
+	}
+      else if (strcmp(var.value, "PLUS4MODEL_PLUS4_PAL") == 0)
+	{
+	  retrow=RETROW_PLUS4_PAL;
+	  retroh=RETROH_PLUS4_PAL;
+	  modl=PLUS4MODEL_PLUS4_PAL;
+	}
+      else if (strcmp(var.value, "PLUS4MODEL_PLUS4_NTSC") == 0)
+	{
+	  retrow=RETROW_PLUS4_NTSC;
+	  retroh=RETROH_PLUS4_NTSC;
+	  modl=PLUS4MODEL_PLUS4_NTSC;
+	}
+      else if (strcmp(var.value, "PLUS4MODEL_V364_NTSC") == 0)
+	{
+	  retrow=RETROW_PLUS4_NTSC;
+	  retroh=RETROH_PLUS4_NTSC;
+	  modl=PLUS4MODEL_V364_NTSC;
+	}
+      else if (strcmp(var.value, "PLUS4MODEL_232_NTSC") == 0)
+	{
+	  retrow=RETROW_PLUS4_NTSC;
+	  retroh=RETROH_PLUS4_NTSC;
+	  modl=PLUS4MODEL_232_NTSC;
+	}
       else if (strcmp(var.value, "PLUS4MODEL_UNKNOWN") == 0)modl=PLUS4MODEL_UNKNOWN;
 
       if(retro_ui_finalized)
@@ -611,20 +673,92 @@ static void update_variables(void)
    {
       int modl=0;
 
-      if (strcmp(var.value, "C64MODEL_C64_PAL") == 0)modl=C64MODEL_C64_PAL;
-      else if (strcmp(var.value, "C64MODEL_C64C_PAL") == 0)modl=C64MODEL_C64C_PAL;
-      else if (strcmp(var.value, "C64MODEL_C64_OLD_PAL") == 0)modl=C64MODEL_C64_OLD_PAL;
-      else if (strcmp(var.value, "C64MODEL_C64_NTSC") == 0)modl=C64MODEL_C64_NTSC;
-      else if (strcmp(var.value, "C64MODEL_C64C_NTSC") == 0)modl=C64MODEL_C64C_NTSC;
-      else if (strcmp(var.value, "C64MODEL_C64_OLD_NTSC") == 0)modl=C64MODEL_C64_OLD_NTSC;
-      else if (strcmp(var.value, "C64MODEL_C64_PAL_N") == 0)modl=C64MODEL_C64_PAL_N;
-      else if (strcmp(var.value, "C64MODEL_C64SX_PAL") == 0)modl=C64MODEL_C64SX_PAL;
-      else if (strcmp(var.value, "C64MODEL_C64SX_NTSC") == 0)modl=C64MODEL_C64SX_NTSC;
-      else if (strcmp(var.value, "C64MODEL_C64_JAP") == 0)modl=C64MODEL_C64_JAP;
-      else if (strcmp(var.value, "C64MODEL_C64_GS") == 0)modl=C64MODEL_C64_GS;
-      else if (strcmp(var.value, "C64MODEL_PET64_PAL") == 0)modl=C64MODEL_PET64_PAL;
-      else if (strcmp(var.value, "C64MODEL_PET64_NTSC") == 0)modl=C64MODEL_PET64_NTSC;
-      else if (strcmp(var.value, "C64MODEL_ULTIMAX") == 0)modl=C64MODEL_ULTIMAX;
+      if (strcmp(var.value, "C64MODEL_C64_PAL") == 0)
+	{
+	  retrow=RETROW_C64_PAL;
+	  retroh=RETROH_C64_PAL;
+	  modl=C64MODEL_C64_PAL;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64C_PAL") == 0)
+	{
+	  retrow=RETROW_C64_PAL;
+	  retroh=RETROH_C64_PAL;
+	  modl=C64MODEL_C64C_PAL;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64_OLD_PAL") == 0)
+	{
+	  retrow=RETROW_C64_PAL;
+	  retroh=RETROH_C64_PAL;
+	  modl=C64MODEL_C64_OLD_PAL;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64_NTSC") == 0)
+	{
+	  retrow=RETROW_C64_NTSC;
+	  retroh=RETROH_C64_NTSC;
+	  modl=C64MODEL_C64_NTSC;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64C_NTSC") == 0)
+	{
+	  retrow=RETROW_C64_NTSC;
+	  retroh=RETROH_C64_NTSC;
+	  modl=C64MODEL_C64C_NTSC;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64_OLD_NTSC") == 0)
+	{
+	  retrow=RETROW_C64_NTSC;
+	  retroh=RETROH_C64_NTSC;
+	  modl=C64MODEL_C64_OLD_NTSC;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64_PAL_N") == 0)
+	{
+	  retrow=RETROW_C64_PAL;
+	  retroh=RETROH_C64_PAL;
+	  modl=C64MODEL_C64_PAL_N;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64SX_PAL") == 0)
+	{
+	  retrow=RETROW_C64_PAL;
+	  retroh=RETROH_C64_PAL;
+	  modl=C64MODEL_C64SX_PAL;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64SX_NTSC") == 0)
+	{
+	  retrow=RETROW_C64_NTSC;
+	  retroh=RETROH_C64_NTSC;
+	  modl=C64MODEL_C64SX_NTSC;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64_JAP") == 0)
+	{
+	  retrow=RETROW_C64_NTSC;
+	  retroh=RETROH_C64_NTSC;
+	  modl=C64MODEL_C64_JAP;
+	}
+      else if (strcmp(var.value, "C64MODEL_C64_GS") == 0)
+	{
+	  /* Based on the fact that virtually all sales of the GS happened in the UK. -tschak */
+	  retrow=RETROW_C64_PAL;
+	  retroh=RETROH_C64_PAL;
+	  modl=C64MODEL_C64_GS;
+	}
+      else if (strcmp(var.value, "C64MODEL_PET64_PAL") == 0)
+	{
+	  retrow=RETROW_C64_PAL;
+	  retroh=RETROH_C64_PAL;
+	  modl=C64MODEL_PET64_PAL;
+	}
+      else if (strcmp(var.value, "C64MODEL_PET64_NTSC") == 0)
+	{
+	  retrow=RETROW_C64_NTSC;
+	  retroh=RETROH_C64_NTSC;
+	  modl=C64MODEL_PET64_NTSC;
+	}
+      else if (strcmp(var.value, "C64MODEL_ULTIMAX") == 0)
+	{
+	  /* This is literally based on the fact that all of the MAX titles were coded for NTSC, as this machine was never sold outside of Japan. -tschak */
+	  retrow=RETROW_C64_NTSC;
+	  retroh=RETROH_C64_NTSC;
+	  modl=C64MODEL_ULTIMAX;
+	}
       else if (strcmp(var.value, "C64MODEL_UNKNOWN") == 0)modl=C64MODEL_UNKNOWN;
 
       if(retro_ui_finalized)
