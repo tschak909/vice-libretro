@@ -61,8 +61,8 @@ extern unsigned vice_devices[ 2 ];
 #define WINDOW_HEIGHT 284
 #define WINDOW_SIZE (448*284)
 #elif  defined(__VIC20__)
-#define WINDOW_WIDTH RETROW_C64_PAL
-#define WINDOW_HEIGHT RETROH_C64_PAL
+#define WINDOW_WIDTH RETROW_VIC20_PAL
+#define WINDOW_HEIGHT RETROH_VIC20_PAL
 #define WINDOW_SIZE (WINDOW_WIDTH*WINDOW_HEIGHT)
 #elif  defined(__PLUS4__)
 #define WINDOW_WIDTH RETROW_PLUS4_PAL
