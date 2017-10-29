@@ -67,22 +67,6 @@ int CROP_WIDTH;
 int CROP_HEIGHT;
 int VIRTUAL_WIDTH;
 
-/* Constants for internal surface dimensions for PAL/NTSC */
-#define RETROW_C64_PAL 384
-#define RETROH_C64_PAL 272
-#define RETROW_C64_NTSC 384
-#define RETROH_C64_NTSC 247
-
-#define RETROW_VIC20_PAL 448
-#define RETROH_VIC20_PAL 284
-#define RETROW_VIC20_NTSC 400
-#define RETROH_VIC20_NTSC 234
-
-#define RETROW_PLUS4_PAL 384
-#define RETROH_PLUS4_PAL 288
-#define RETROW_PLUS4_NTSC 384
-#define RETROH_PLUS4_NTSC 242
-
 #if defined(__CBM2__)
 int	retrow=704;
 int	retroh=266;

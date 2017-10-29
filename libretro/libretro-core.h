@@ -36,6 +36,22 @@ extern unsigned vice_devices[ 2 ];
 #define uint32 uint32_t
 #define uint8 uint8_t
 
+/* Constants for internal surface dimensions for PAL/NTSC */
+#define RETROW_C64_PAL 384
+#define RETROH_C64_PAL 272
+#define RETROW_C64_NTSC 384
+#define RETROH_C64_NTSC 247
+
+#define RETROW_VIC20_PAL 568
+#define RETROH_VIC20_PAL 284
+#define RETROW_VIC20_NTSC 520
+#define RETROH_VIC20_NTSC 234
+
+#define RETROW_PLUS4_PAL 384
+#define RETROH_PLUS4_PAL 288
+#define RETROW_PLUS4_NTSC 384
+#define RETROH_PLUS4_NTSC 242
+
 #if defined(__CBM2__)
 #define WINDOW_WIDTH 704
 #define WINDOW_HEIGHT 266
@@ -45,17 +61,17 @@ extern unsigned vice_devices[ 2 ];
 #define WINDOW_HEIGHT 284
 #define WINDOW_SIZE (448*284)
 #elif  defined(__VIC20__)
-#define WINDOW_WIDTH 448
-#define WINDOW_HEIGHT 284
-#define WINDOW_SIZE (448*284)
+#define WINDOW_WIDTH RETROW_C64_PAL
+#define WINDOW_HEIGHT RETROH_C64_PAL
+#define WINDOW_SIZE (WINDOW_WIDTH*WINDOW_HEIGHT)
 #elif  defined(__PLUS4__)
-#define WINDOW_WIDTH 384
-#define WINDOW_HEIGHT 288
-#define WINDOW_SIZE (384*288)
+#define WINDOW_WIDTH RETROW_PLUS4_PAL
+#define WINDOW_HEIGHT RETROH_PLUS4_PAL
+#define WINDOW_SIZE (WINDOW_WIDTH*WINDOW_HEIGHT)
 #else
-#define WINDOW_WIDTH 384
-#define WINDOW_HEIGHT 272
-#define WINDOW_SIZE (384*272)
+#define WINDOW_WIDTH RETROW_C64_PAL
+#define WINDOW_HEIGHT RETROH_C64_PAL
+#define WINDOW_SIZE (WINDOW_WIDTH*WINDOW_HEIGHT)
 #endif
 
 #ifdef FRONTEND_SUPPORTS_RGB565
